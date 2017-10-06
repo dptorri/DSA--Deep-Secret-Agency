@@ -49,24 +49,34 @@ if($_POST)
         <a class="navbar-brand" href="#">DSA - Deep Secret Agency</a>
         </div>
         <ul class="nav navbar-nav">
-            <!--
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Page 1</a></li>
-        <li><a href="#">Page 2</a></li>
-        <li><a href="#">Page 3</a></li> -->
         </ul>
     </div>
 </nav>
 <div class="container-fluid">
 <div class="container white-box">
-    <h3>Sign in</h3>
-    <form action="login.php" method="post">
+<?php
+if($_POST){
+    $db = db_connect();
+    $stmt = $db->prepare(
+        'INSERT INTO `users` (`name`,`password`) VALUES (?,?);'
+    );
+    $hash = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+    $stmt->execute([[$_POST], $hash]);
+    header('Location: login.php');
+    exit();
+}
+?>
+
+    <h3>Register</h3>
+    <form action="register.php" method="post">
     Username:<input type="text" class="form-control" name="usr"><br>
     Password:<input type="text" class="form-control" name="pwd"><br>
+    E-Mail:<input type="email" class="form-control" name="email"><br>
     <button type="submit" class="btn btn-block btn-primary" >Sign in</button>
     <button type="submit" class="btn btn-block" >Sign up</button>
 </form>
 </div>
 </div>
+
 </body>
 </html>
